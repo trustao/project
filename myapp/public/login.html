@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a,a:active{
+            text-decoration: none;
+            color: white;
+        }
+        #userDiv{
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        #error{
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginDiv">
+        <label for="username">用户名：</label>
+        <input type="text" name="username" id="username" placeholder="请输入用户名">
+        <label for="password">密码：</label>
+        <input type="password" name="password" id="password">
+        <input type="button"  id="login" value="提交">
+        <input type="button" id="register" value="注册">
+        <span id="error">用户名或密码错误</span>
+    </div>
+    <div id="userDiv">尊敬的<span id="coName"></span><span id="coGender"></span>;欢迎您</div>
+    <script type="text/javascript">
+    var rg = document.getElementById("register");
+    var login = document.getElementById("login");
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    rg.onclick = function(){
+        setRgister("register.html");
+    };
+    login.onclick = function(){
+        var userinfo = "username=" + username.value + "&password=" + password.value;
+        var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange = function(){
+         if(xmlhttp.readyState === 4 && xmlhttp.status === 200){
+                var result = JSON.parse(xmlhttp.responseText).result;
+                if(result === 1 ){
+                    var userDiv = document.getElementById("userDiv");
+                    var coName = document.getElementById("coName");
+                    var coGender = document.getElementById("coGender");
+                    var loginDiv = document.getElementById("loginDiv");
+                    userDiv.style.display = "block";
+                    var cookie = JSON.parse(decodeURI("{\""+document.cookie.replace(/;/g,"\",\"").replace(/=/g,"\":\"").replace(/\s/g,"")+"\"}")); //将cookie转为对象；
+                    coName.innerText = cookie.username;
+//                    coGender.innerText = cookie.gender;
+                    loginDiv.remove();
+                }else{
+                    var serror = document.getElementById("error");
+                    console.log("serror");
+                    serror.style.visibility = "visible";
+                }
+         }
+         };
+         xmlhttp.open("post","/login");
+         xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+         xmlhttp.send(userinfo);
+    };
+    function setRgister(src){
+        var rgbg = document.createElement("div");
+        rgbg.style.width = window.innerWidth + "px";
+        rgbg.style.height = window.innerHeight + "px";
+        rgbg.style.backgroundColor = "rgba(0,0,0,0.8)";
+        rgbg.style.position = "fixed";
+        rgbg.style.left = 0;
+        rgbg.style.top = 0;
+        document.body.appendChild(rgbg);
+        var wrapper = document.createElement("div");
+        wrapper.style.width = "400px";
+        wrapper.style.height = "400px";
+        wrapper.style.position = "absolute";
+        wrapper.style.top = "80px";
+        wrapper.style.left = (window.innerWidth - 400)/2 + "px";
+        wrapper.style.borderRadius = "10px";
+        wrapper.style.backgroundColor = "white";
+        wrapper.style.overflow = "hidden";
+        rgbg.appendChild(wrapper);
+        var iframe = document.createElement("iframe");
+        iframe.src = src;
+        iframe.style.border = "none";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        wrapper.appendChild(iframe);
+        var del = document.createElement("div");
+        del.style.width = "30px";
+        del.style.height = "30px";
+        del.style.borderRadius = "50%";
+        del.innerHTML = "<a href='javascript:;'>X</a>";
+        del.style.textAlign = "center";
+        del.style.font = "18px/30px 'Malgun Gothic'";
+        del.style.border = "1px solid #ccc";
+        del.style.color = "#fff";
+        del.style.position = "absolute";
+        del.style.top = "70px";
+        del.style.left = (window.innerWidth - 400)/2 + 390 +"px";
+        del. style.zIndex = 2;
+        rgbg.appendChild(del);
+        del.onclick = function(){
+            rgbg.remove();
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #wrapper{
+            width: 380px;
+            height: 300px;
+            margin: 20px auto;
+            padding: 30px 10px;
+        }
+        h1{
+            font: 22px/40px "微软雅黑";
+            text-align: center;
+            color: seagreen;
+            word-spacing: 1em;
+        }
+        #input{
+            width: 90%;
+            height:40%;
+            border: 1px  solid #ccc;
+            border-radius: 5px;
+            margin: 20px auto;
+        }
+        #input input{
+            border: none;
+            outline: none;
+            padding: 5% 4%;
+            font: 18px/25px "微软雅黑";
+
+        }
+        .cell{
+            width: 100%;
+            height: 50%;
+            overflow: hidden;
+        }
+        .cell:first-child{
+            border-bottom: 1px solid #ccc;
+        }
+        #submit{
+            display:block;
+            width: 100px;
+            height: 40px;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            background-color: seagreen;
+            margin: 20px auto;
+            color: white;
+            font:18px "微软雅黑";
+        }
+        #submit:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="wrapper">
+
+            <h1>注&nbsp;册</h1>
+            <div id="input">
+                <div class="cell">
+                     <input type="text" name="username" id="username" placeholder="请输入用户名">
+                </div>
+                <div class="cell">
+                   <input type="password" name="password" id="password" placeholder="请输入密码">
+                </div>
+            </div>
+            <input type="submit"  id="submit" value="提交" >
+
+    </div>
+<script type="text/javascript">
+    var submit = document.getElementById("submit");
+    var username = document.getElementById("username");
+    var pw = document.getElementById("password");
+    submit.onclick = function(){
+
+        var userInfo = "username="+username.value+"&password="+pw.value;
+
+
+        console.log(JSON.stringify(userInfo));
+        var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange = function(){
+            if(xmlhttp.readyState === 4 && xmlhttp.status === 200){
+
+            }
+        };
+        xmlhttp.open("post","/register");
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send(userInfo);
+    }
+</script>
+</body>
+</html>

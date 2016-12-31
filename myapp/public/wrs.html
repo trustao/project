@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+    function decodeUTF8(str){
+        return str.replace(/(\\u)(\w{4}|\w{2})/gi, function($0,$1,$2){
+            return String.fromCharCode(parseInt($2,16));
+        });
+    }
+    //UTF字符转换
+    var UTFTranslate = {
+        Change: function (pValue) {
+            return pValue.replace(/[^\u0000-\u00FF]/g, function ($0) {
+                return escape($0).replace(/(%u)(\w{4})/gi, "&#x$2;")
+            });
+        },
+        ReChange: function (pValue) {
+            return unescape(pValue.replace(/&#x/g, '%u').replace(/\\u/g, '%u').replace(/;/g, ''));
+        }
+    };
+    var sss = "%E5%A4%8F%E6%B4%9B%E5%85%8B%E7%A6%8F%E9%94%81%E5%8D%95";
+    var aaa = sss.split("%");
+    var num = "";
+    aaa.forEach(function(e,i){
+        num += String.fromCharCode(parseInt(e,16));
+    });
+    var es = decodeURI(sss);
+    console.log(es);
+</script>
+</body>
+</html>
