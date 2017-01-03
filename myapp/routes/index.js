@@ -5,10 +5,12 @@ var db = require('../db.js');
 router.post('/login', function(req, res, next) {
   db.findData(req.body,function(result){
     console.log(result);
-    if(result){
+    if(result===1){
       res.cookie("username",req.body.username);
       //res.cookie('username', 'aaaa', {maxAge:600000, path:'/'});
       console.log("设置cookie");
+    }else if(result === -1){
+      res.send()
     }
     res.send('{"result":' + result + '}');
   });
@@ -17,14 +19,23 @@ router.post('/login', function(req, res, next) {
 
 });
 router.post("/register",function(req,res,next){
-  db.createUser(req.body,function(err,data){
-    if(err){
-      console.log("aaa"+err);
-    }else {
-      console.log("bbb"+data);
+  db.findData(req.body.username,function(r){
+    if(r === -1){
+      res.send('{"result":-1}')
+    }else  if(r === 0){
+      db.createUser(req.body,function(err,docs){
+        if(err){
+          console.log(err);
+          res.send('{"result":-1}');
+        }else{
+          res.send('{"result":1}');
+        }
+      });
+    }else if(r === 1){
+      res.send('{"result":0}')
     }
   });
-console.log(req.body.username);
-  res.send();
+
+
 });
 module.exports = router;

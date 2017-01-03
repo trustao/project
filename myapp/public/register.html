@@ -57,6 +57,10 @@
         #submit:hover{
             cursor: pointer;
         }
+        #mistake{
+            color:red;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +70,8 @@
             <h1>注&nbsp;册</h1>
             <div id="input">
                 <div class="cell">
-                     <input type="text" name="username" id="username" placeholder="请输入用户名">
+                    <input type="text" name="username" id="username" placeholder="请输入用户名">
+                    <span id="mistake">用户名已存在</span>
                 </div>
                 <div class="cell">
                    <input type="password" name="password" id="password" placeholder="请输入密码">
@@ -76,6 +81,8 @@
 
     </div>
 <script type="text/javascript">
+
+
     var submit = document.getElementById("submit");
     var username = document.getElementById("username");
     var pw = document.getElementById("password");
@@ -88,6 +95,17 @@
         var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
         xmlhttp.onreadystatechange = function(){
             if(xmlhttp.readyState === 4 && xmlhttp.status === 200){
+                console.log(xmlhttp.responseText);
+                var resp =JSON.parse(xmlhttp.responseText);
+                var mistake = document.getElementById("mistake");
+                if(resp.result === -1){
+                    alert("对不起，服务器繁忙，请稍后再试！")
+                }else if(resp.result === 0){
+                    mistake.style.display = "inline-block"
+                }else if(resp.result === 1){
+                    alert("注册成功!");
+                    window.parent.rgbg.remove();
+                }
 
             }
         };

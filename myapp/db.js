@@ -14,19 +14,16 @@ var schama = new mongoose.Schema({
     password : {type : String}
 });
 var Model = mongoose.model("userInfo",schama);
- module.exports.createUser = function (data){
+ module.exports.createUser = function (data,fun){
      var newUser = new Model(data);
     console.log("dbAdd:"+data.username);
-     newUser.save();
+     newUser.save(fun);
  };
 module.exports.findData =function(data,fun){
-    console.log(data);
-    var result = "";
     Model.find(data,function(err,docs){
         if(err){
             console.log("dbFindError",err);
-
-            fun(0);
+            fun(-1)
         }else if(docs.length){
             console.log("dbFindSuccess",docs);
             fun(1);
